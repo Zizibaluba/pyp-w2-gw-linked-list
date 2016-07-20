@@ -54,40 +54,20 @@ class LinkedList(AbstractLinkedList):
             count += 1
             cur = cur.next
         return count
-
-    # Need to abstract generator so we get new instances every time
-    def __iter__(self):
-        node_generator = self.generator()
-        return node_generator()
-
-    def generator(self):
-        while self.cur_pointer != None:
-            current_value = self.cur_pointer.elem
-            self.cur_pointer = self.cur_pointer.next
-            yield current_value
-
-# Can we do this instead of the above? yield keyword itself means we are invoking generator function
-# You want to refresh the current_value each time. Also, I'm not sure it'd be easy to create a new generator in a iter method.
-    def __iter__(self):
-        current_value = self.cur_pointer.elem
-        while self.cur_pointer != None:
-             yield current_value
-             self.cur_pointer = self.cur_pointer.next
-
-# >>> from linked_list.implementation import LinkedList
-# >>> from linked_list.node import Node
-# >>> from linked_list.interface import AbstractLinkedList
-# l = LinkedList([1,2,3,4,5])
-# it = iter(l)
-# print next(it)
-# print next(it)
-# print next(it)
-# print next(it)
-# print next(it)
-
-
-    # next = __next__
     
+    # iter generator, uses a local variable so iteration can be used multiple times 
+    def __iter__(self):
+        generator_pointer = self.cur_pointer
+        while generator_pointer != None:
+            yield generator_pointer.elem
+            generator_pointer = generator_pointer.next
+
+
+# from linked_list.implementation import LinkedList
+# from linked_list.node import Node
+# from linked_list.interface import AbstractLinkedList
+# l = LinkedList([1,2,3,4,5])
+
     def __getitem__(self, index):
         for idx, node in self:
             if idx == index:
