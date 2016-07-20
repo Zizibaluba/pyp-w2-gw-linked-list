@@ -74,12 +74,24 @@ class LinkedList(AbstractLinkedList):
         # If either are empty, use the other in place of the other
         # If both are occupied, point self.end.next to other.start
        
+        # If neither is occupied node, return an empty node
+        if self.start.elem == None and other.start.elem == None:
+            return self
+        
+        # Get a copy of self so value by reference doesn't overwrite the original value
         addition_self = deepcopy(self)
-        if (self.start == self.end and self.start.elem == None) or (other.start == other.end and self.start.elem == None):
+        addition_other = deepcopy(other)
+        
+        if self.start == self.end and self.start.elem == None:
             addition_self.start = other.start
             addition_self.end = other.end
             addition_self.cur_pointer = addition_self.start
             return addition_self
+        elif other.start == other.end and other.start.elem == None:
+            addition_other.start = self.start
+            addition_other.end = self.end
+            addition_other.cur_pointer = addition_other.start
+            return addition_other
         elif len(self) == 1:
             addition_self.start.next = other.start
             addition_self.end = other.end
@@ -92,10 +104,7 @@ class LinkedList(AbstractLinkedList):
             raise IndexError
         
     
-    # Need to fix this
     def __iadd__(self, other):
-        # self += other
-        
         # Both LLs are empty, return an empty LL
         if self.start.elem == None and other.start.elem == None:
             return self
@@ -112,20 +121,6 @@ class LinkedList(AbstractLinkedList):
             self.end.next = other.start
             self.end = other.end
             return self
-            
-        
-        # if self.start.elem == None:
-        #     self.start = other.start
-        #     self.end = other.end
-        # elif len(self) == 1:
-        #     self.start.next = other.start
-        #     self.end = other.end
-        # elif len(self) > 1:
-        #     self.end.next = other.start
-        #     self.end = other.end
-        # else:
-        #     raise IndexError
-        # return self
 
     def __eq__(self, other):
         if len(self) != len(other):
