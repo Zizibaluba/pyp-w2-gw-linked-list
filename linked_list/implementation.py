@@ -38,6 +38,8 @@ class LinkedList(AbstractLinkedList):
                 
     def __str__(self):
         result = []
+        if self.start == None:
+            return "[]"
         cur = self.start
         while cur != None:
             result.append(cur.elem)
@@ -46,14 +48,19 @@ class LinkedList(AbstractLinkedList):
         return str([(i) for i in result])
 
     def __len__(self):
-        if self.start == None:
-            return 0
-        count = 0
-        cur = self.start
-        while cur != None:
-            count += 1
-            cur = cur.next
-        return count
+        length = 0
+        for item in self:
+            length += 1
+        return length
+        
+        # if self.start == None:
+        #     return 0
+        # count = 0
+        # cur = self.start
+        # while cur != None:
+        #     count += 1
+        #     cur = cur.next
+        # return count
     
     # iter generator, uses a local variable so iteration can be used multiple times 
     def __iter__(self):
@@ -69,9 +76,9 @@ class LinkedList(AbstractLinkedList):
 # l = LinkedList([1,2,3,4,5])
 
     def __getitem__(self, index):
-        for idx, node in self:
-            if idx == index:
-                return node
+        for node_index, element in enumerate(self):
+            if node_index == index:
+                return element
 
     def __add__(self, other):
         self.end.next = other.start
@@ -79,33 +86,51 @@ class LinkedList(AbstractLinkedList):
         return self
         
     def __iadd__(self, other):
-        self.end.next = other.start
-        self.end = other.end
-        return self
-        # self.element += other.element
+        if other == None:
+            return
+        elif self.start == None:
+            self.start = other.start
+            self.end = other.end
+        else:
+            self.end.next = other.start
+            self.end = other.end
+            # self.element += other.element
         # return self
 
     def __eq__(self, other):
-        a_val = []
-        a = self.start
-        while a:
-            a_val.append(a.elem)
-            a = a.next
+        if len(self) != len(other):
+            return False
+        for index, item in enumerate(self):
+            if item != other[index]:
+                return False
+        return True
         
-        b_val = []
-        b = other.start
-        while b:
-            b_val.append(b.elem)
-            b = b.next
-        #print('a=',a_val,'b=',b_val)
-        a = [str(i) for i in a_val]
-        b = [str(i) for i in b_val]
-        return a == b
+ 
+        # a_val = []
+        # a = self.start
+        # while a:
+        #     a_val.append(a.elem)
+        #     a = a.next
+        
+        # b_val = []
+        # b = other.start
+        # while b:
+        #     b_val.append(b.elem)
+        #     b = b.next
+        # #print('a=',a_val,'b=',b_val)
+        # a = [str(i) for i in a_val]
+        # b = [str(i) for i in b_val]
+        # return a == b
     
     # Can probably be implemented the same way as above, except != return statement
     def __ne__(self, other):
-        pass
-        
+        if len(self) != len(other):
+            return True
+        for index, item in enumerate(self):
+            if item != other[index]:
+                return True
+        return False
+            
     def append(self, elem):
         if elem == None:
             return
@@ -131,13 +156,18 @@ class LinkedList(AbstractLinkedList):
         return count
 
     def pop(self, index=None):
-        if self.start == None:
+        
+        if self.start.elem == None:
             raise IndexError()
-        if self.start.next == None:
-            self.start = None
-            self.end = None
-        if index == None:
+        elif self.start.next == None:
+            new = Node()
+            result = self.start.elem
+            self.start = new
+            self.end = new
+            return result
+        elif index == None:
             cur = self.start
+            print('cur=',cur.elem)
             while cur.next.next != None:
                 cur = cur.next
             result = cur.next
