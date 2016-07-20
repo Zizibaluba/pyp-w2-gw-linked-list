@@ -143,15 +143,17 @@ class LinkedList(AbstractLinkedList):
             elem = LinkedList(elem)
         else:
             elem = LinkedList([elem])
-        if self.start == self.end:
-            self.start = elem.start
-            self.end = elem.end
-        elif len(self) > 0:
-            self.end.next = elem.start
-            self.end = elem.end
-        else:
-            raise IndexError
+        self += elem
         return self
+        # if self.start == self.end:
+        #     self.start = elem.start
+        #     self.end = elem.end
+        # elif len(self) > 0:
+        #     self.end.next = elem.start
+        #     self.end = elem.end
+        # else:
+        #     raise IndexError
+        # return self
             
         # if self.start == Node():
         #     newNode = Node(elem)
