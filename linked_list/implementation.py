@@ -96,12 +96,14 @@ class LinkedList(AbstractLinkedList):
     def __iadd__(self, other):
         # self += other
         
+        # Both LLs are empty, return an empty LL
         if self.start.elem == None and other.start.elem == None:
             return self
         # Check if self is an empty LL
         elif self.start == self.end and self.start.elem == None:
             self.start = other.start
             self.end = other.end
+            self.cur_pointer = self.start #Needed because start is at other.start now
             return self
         # Check if other is an empty LL
         elif other.start == other.end and other.start.elem == None:
