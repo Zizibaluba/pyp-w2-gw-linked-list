@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 import unittest
-
-from linked_list import Node, LinkedList
-
+import sys 
+#print("\n".join(sys.path))
+#sys.path.append('/home/ubuntu/.virtualenvs/python-linked-list/linked_list')
+sys.path.append('/home/ubuntu/workspace')
+sys.path.append('/home/ubuntu/workspace/linked_list')
+#print("\n".join(sys.path)')
+ 
+# from linked_list import Node, LinkedList
+from linked_list.node import Node
+from linked_list.implementation import LinkedList
 
 class LinkedListTestCase(unittest.TestCase):
 
@@ -20,10 +27,10 @@ class LinkedListTestCase(unittest.TestCase):
 
         self.assertTrue(l1.start.next.next is not None)
         self.assertEqual(l1.start.next.next.elem, 3)
+        #print('successful!')
 
     def test_append(self):
         my_list = LinkedList()
-
         my_list.append(1)
         self.assertEqual(my_list.start.elem, 1)
         self.assertEqual(my_list.start.next, None)
