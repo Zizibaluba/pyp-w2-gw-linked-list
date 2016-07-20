@@ -1,6 +1,6 @@
 from .node import Node
 from .interface import AbstractLinkedList
-
+from copy import deepcopy
 
 class LinkedList(AbstractLinkedList):
     """
@@ -14,7 +14,9 @@ class LinkedList(AbstractLinkedList):
         self.start = Node()
         self.end = Node()
         
-        if len(elements) == 1:
+        if len(elements) == 0:
+            self.start = self.end
+        elif len(elements) == 1:
             # Build a single node here
             if isinstance(elements, list):
                 newnode = Node(elements[0])
@@ -44,7 +46,6 @@ class LinkedList(AbstractLinkedList):
         while cur != None:
             result.append(cur.elem)
             cur = cur.next
-            
         return str([(i) for i in result])
 
     def __len__(self):
@@ -53,15 +54,7 @@ class LinkedList(AbstractLinkedList):
             length += 1
         return length
         
-        # if self.start == None:
-        #     return 0
-        # count = 0
-        # cur = self.start
-        # while cur != None:
-        #     count += 1
-        #     cur = cur.next
-        # return count
-    
+
     # iter generator, uses a local variable so iteration can be used multiple times 
     def __iter__(self):
         generator_pointer = self.cur_pointer
@@ -69,32 +62,67 @@ class LinkedList(AbstractLinkedList):
             yield generator_pointer.elem
             generator_pointer = generator_pointer.next
 
-
-# from linked_list.implementation import LinkedList
-# from linked_list.node import Node
-# from linked_list.interface import AbstractLinkedList
-# l = LinkedList([1,2,3,4,5])
-
     def __getitem__(self, index):
         for node_index, element in enumerate(self):
             if node_index == index:
                 return element
 
+    # Needs to abstract self
     def __add__(self, other):
-        self.end.next = other.start
-        self.end = other.end
-        return self
+        # Check whether self is an empty LL
+        # Check whether other is an empty LL
+        # If either are empty, use the other in place of the other
+        # If both are occupied, point self.end.next to other.start
+       
+        addition_self = deepcopy(self)
+        if (self.start == self.end and self.start.elem == None) or (other.start == other.end and self.start.elem == None):
+            addition_self.start = other.start
+            addition_self.end = other.end
+            addition_self.cur_pointer = addition_self.start
+            return addition_self
+        elif len(self) == 1:
+            addition_self.start.next = other.start
+            addition_self.end = other.end
+            return addition_self
+        elif len(self) > 1:
+            addition_self.end.next = other.start
+            addition_self.end = other.end
+            return addition_self
+        else:
+            raise IndexError
         
+    
+    # Need to fix this
     def __iadd__(self, other):
-        if other == None:
-            return
-        elif self.start == None:
+        # self += other
+        
+        if self.start.elem == None and other.start.elem == None:
+            return self
+        # Check if self is an empty LL
+        elif self.start == self.end and self.start.elem == None:
             self.start = other.start
             self.end = other.end
+            return self
+        # Check if other is an empty LL
+        elif other.start == other.end and other.start.elem == None:
+            return self
         else:
             self.end.next = other.start
             self.end = other.end
-            # self.element += other.element
+            return self
+            
+        
+        # if self.start.elem == None:
+        #     self.start = other.start
+        #     self.end = other.end
+        # elif len(self) == 1:
+        #     self.start.next = other.start
+        #     self.end = other.end
+        # elif len(self) > 1:
+        #     self.end.next = other.start
+        #     self.end = other.end
+        # else:
+        #     raise IndexError
         # return self
 
     def __eq__(self, other):
@@ -104,25 +132,7 @@ class LinkedList(AbstractLinkedList):
             if item != other[index]:
                 return False
         return True
-        
- 
-        # a_val = []
-        # a = self.start
-        # while a:
-        #     a_val.append(a.elem)
-        #     a = a.next
-        
-        # b_val = []
-        # b = other.start
-        # while b:
-        #     b_val.append(b.elem)
-        #     b = b.next
-        # #print('a=',a_val,'b=',b_val)
-        # a = [str(i) for i in a_val]
-        # b = [str(i) for i in b_val]
-        # return a == b
-    
-    # Can probably be implemented the same way as above, except != return statement
+
     def __ne__(self, other):
         if len(self) != len(other):
             return True
@@ -132,21 +142,31 @@ class LinkedList(AbstractLinkedList):
         return False
             
     def append(self, elem):
-        if elem == None:
-            return
-        elif self.start == None:
-            newNode = Node(elem)
-            self.start = newNode
-            self.end = newNode
- 
+        if isinstance(elem, list):
+            elem = LinkedList(elem)
         else:
-            newNode = Node(elem)
-            self.end.next = newNode
-            self.end = newNode
-
+            elem = LinkedList([elem])
+        if self.start == self.end:
+            self.start = elem.start
+            self.end = elem.end
+        elif len(self) > 0:
+            self.end.next = elem.start
+            self.end = elem.end
+        else:
+            raise IndexError
+        return self
+            
+        # if self.start == Node():
+        #     newNode = Node(elem)
+        #     self.start = newNode
+        #     self.end = newNode
+        # else:
+        #     newNode = Node(elem)
+        #     self.end.next = newNode
+        #     self.end = newNode
 
     def count(self):
-        if self.start == None:
+        if self.start.elem == None:
             return 0
         count = 0
         cur = self.start
@@ -195,3 +215,9 @@ class LinkedList(AbstractLinkedList):
             result = cur.elem
             pre.next = cur.next
             return result
+            
+# from linked_list.implementation import LinkedList
+# from linked_list.node import Node
+# from linked_list.interface import AbstractLinkedList
+# l = LinkedList([1,2,3,4,5])
+# a = LinkedList([7,8,9])
