@@ -163,13 +163,13 @@ class LinkedList(AbstractLinkedList):
 
     def pop(self, index=None):
         # Exceptions
-        if index > len(self) - 1:
-            raise IndexError
-        if self.start == None:
-            raise IndexError
-            
-        if index == None:
-                index = len(self) - 1
+        if index != None:
+            if index > len(self) - 1:
+                raise IndexError
+            if self.start == None:
+                raise IndexError
+        elif index == None:
+            index = len(self) - 1
                 
         if index == 0:
             pop_value = self[index]
