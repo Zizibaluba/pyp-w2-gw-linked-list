@@ -8,9 +8,6 @@ class LinkedList(AbstractLinkedList):
     """
 
     def __init__(self, elements=None):
-        if elements == None:
-            elements = []
-        self.length = len(elements) #index for __iter__ (remember to change this if appending or popping)
         self.start = Node()
         self.end = Node()
         
@@ -159,6 +156,8 @@ class LinkedList(AbstractLinkedList):
         #     self.end = newNode
 
     def count(self):
+        if self.start == None:
+            return 0
         if self.start.elem == None:
             return 0
         count = 0
@@ -195,6 +194,8 @@ class LinkedList(AbstractLinkedList):
                     break
                 current_node = current_node.next
                 current_index += 1
+            if len(self) == 0:
+                self.start.elem = []
             return pop_value
             
         
@@ -237,3 +238,6 @@ class LinkedList(AbstractLinkedList):
         #     pre.next = cur.next
         #     return result
             
+# from linked_list.implementation import LinkedList
+# from linked_list.node import Node
+# from linked_list.interface import AbstractLinkedList
