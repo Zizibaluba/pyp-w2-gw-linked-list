@@ -8,10 +8,10 @@ class LinkedList(AbstractLinkedList):
     """
 
     def __init__(self, elements=None):
-        self.start = Node()
-        self.end = Node()
+        self.start = None
+        self.end = None
         
-        if len(elements) == 0:
+        if elements == None:
             self.start = self.end
         elif len(elements) == 1:
             # Build a single node here
@@ -57,12 +57,6 @@ class LinkedList(AbstractLinkedList):
         generator_pointer = self.cur_pointer
         while generator_pointer != None:
             yield generator_pointer.elem
-            generator_pointer = generator_pointer.next
-
-    def node_generator(self):
-        generator_pointer = self.cur_pointer
-        while generator_pointer != None:
-            yield generator_pointer
             generator_pointer = generator_pointer.next
 
     def __getitem__(self, index):
