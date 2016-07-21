@@ -163,10 +163,10 @@ class LinkedList(AbstractLinkedList):
 
     def pop(self, index=None):
         # Exceptions
+        if self.start == None:
+            raise IndexError
         if index != None:
             if index > len(self) - 1:
-                raise IndexError
-            if self.start == None:
                 raise IndexError
         elif index == None:
             index = len(self) - 1
@@ -188,8 +188,6 @@ class LinkedList(AbstractLinkedList):
                     break
                 current_node = current_node.next
                 current_index += 1
-            if len(self) == 0:
-                self.start.elem = []
             return pop_value
             
         
