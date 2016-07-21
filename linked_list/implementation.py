@@ -72,18 +72,18 @@ class LinkedList(AbstractLinkedList):
         # If both are occupied, point self.end.next to other.start
        
         # If neither is occupied node, return an empty node
-        if self.start.elem == None and other.start.elem == None:
+        if self.start == None and other.start == None:
             return self
         
         # Get a copy of self so value by reference doesn't overwrite the original value
         addition_self = deepcopy(self)
         addition_other = deepcopy(other)
         
-        if self.start == self.end and self.start.elem == None:
+        if self.start == self.end and self.start == None:
             addition_self.start = other.start
             addition_self.end = other.end
             addition_self.cur_pointer = addition_self.start
-        elif other.start == other.end and other.start.elem == None:
+        elif other.start == other.end and other.start == None:
             addition_other.start = self.start
             addition_other.end = self.end
             addition_other.cur_pointer = addition_other.start
@@ -100,16 +100,16 @@ class LinkedList(AbstractLinkedList):
     
     def __iadd__(self, other):
         # Both LLs are empty, return an empty LL
-        if self.start.elem == None and other.start.elem == None:
+        if self.start == None and other.start == None:
             return self
         # Check if self is an empty LL
-        elif self.start == self.end and self.start.elem == None:
+        elif self.start == self.end and self.start == None:
             self.start = other.start
             self.end = other.end
             self.cur_pointer = self.start #Needed because start is at other.start now
             return self
         # Check if other is an empty LL
-        elif other.start == other.end and other.start.elem == None:
+        elif other.start == other.end and other.start == None:
             return self
         else:
             self.end.next = other.start
@@ -165,7 +165,7 @@ class LinkedList(AbstractLinkedList):
         # Exceptions
         if index > len(self) - 1:
             raise IndexError
-        if self.start.elem == None:
+        if self.start == None:
             raise IndexError
             
         if index == None:
