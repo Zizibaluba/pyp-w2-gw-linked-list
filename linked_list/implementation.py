@@ -62,6 +62,12 @@ class LinkedList(AbstractLinkedList):
             yield generator_pointer.elem
             generator_pointer = generator_pointer.next
 
+    def node_generator(self):
+        generator_pointer = self.cur_pointer
+        while generator_pointer != None:
+            yield generator_pointer
+            generator_pointer = generator_pointer.next
+
     def __getitem__(self, index):
         for node_index, element in enumerate(self):
             if node_index == index:
@@ -86,7 +92,6 @@ class LinkedList(AbstractLinkedList):
             addition_self.start = other.start
             addition_self.end = other.end
             addition_self.cur_pointer = addition_self.start
-            return addition_self
         elif other.start == other.end and other.start.elem == None:
             addition_other.start = self.start
             addition_other.end = self.end
@@ -95,14 +100,12 @@ class LinkedList(AbstractLinkedList):
         elif len(self) == 1:
             addition_self.start.next = other.start
             addition_self.end = other.end
-            return addition_self
         elif len(self) > 1:
             addition_self.end.next = other.start
             addition_self.end = other.end
-            return addition_self
         else:
             raise IndexError
-        
+        return addition_self
     
     def __iadd__(self, other):
         # Both LLs are empty, return an empty LL
@@ -145,16 +148,7 @@ class LinkedList(AbstractLinkedList):
             elem = LinkedList([elem])
         self += elem
         return self
-        # if self.start == self.end:
-        #     self.start = elem.start
-        #     self.end = elem.end
-        # elif len(self) > 0:
-        #     self.end.next = elem.start
-        #     self.end = elem.end
-        # else:
-        #     raise IndexError
-        # return self
-            
+
         # if self.start == Node():
         #     newNode = Node(elem)
         #     self.start = newNode
@@ -175,48 +169,71 @@ class LinkedList(AbstractLinkedList):
         return count
 
     def pop(self, index=None):
-        
+        # Exceptions
+        if index > len(self) - 1:
+            raise IndexError
         if self.start.elem == None:
-            raise IndexError()
-        elif self.start.next == None:
-            new = Node()
-            result = self.start.elem
-            self.start = new
-            self.end = new
-            return result
-        elif index == None:
-            cur = self.start
-            print('cur=',cur.elem)
-            while cur.next.next != None:
-                cur = cur.next
-            result = cur.next
-            cur.next = None
-            self.end = cur
-            return result.elem
-        elif index == 0:
-            result = self.start.elem
-            if self.start.next == None:
-                self.start = None
-                self.end = None
-                return result
-            else:
-                self.start = self.start.next
-                return result
-        else:
-            pre = Node(0)
-            pre.next = self.start
-            cur_index = 0
-            cur = self.start
-            while cur_index < index:
-                pre = pre.next
-                cur = cur.next
-                cur_index += 1
-            result = cur.elem
-            pre.next = cur.next
-            return result
+            raise IndexError
             
-# from linked_list.implementation import LinkedList
-# from linked_list.node import Node
-# from linked_list.interface import AbstractLinkedList
-# l = LinkedList([1,2,3,4,5])
-# a = LinkedList([7,8,9])
+        if index == None:
+                index = len(self) - 1
+                
+        if index == 0:
+            pop_value = self[index]
+            self.start = self.start.next
+            self.cur_pointer = self.start
+            return pop_value
+        else:
+            current_index = 0
+            current_node = self.start
+            pop_value = 0
+            while current_index < index:
+                if current_index == index -1:
+                    previous_node = current_node
+                    pop_value = current_node.next.elem
+                    previous_node.next = current_node.next.next
+                    break
+                current_node = current_node.next
+                current_index += 1
+            return pop_value
+            
+        
+        # if self.start.elem == None:
+        #     raise IndexError()
+        # elif self.start.next == None:
+        #     new = Node()
+        #     result = self.start.elem
+        #     self.start = new
+        #     self.end = new
+        #     return result
+        # elif index == None:
+        #     cur = self.start
+        #     print('cur=',cur.elem)
+        #     while cur.next.next != None:
+        #         cur = cur.next
+        #     result = cur.next
+        #     cur.next = None
+        #     self.end = cur
+        #     return result.elem
+        # elif index == 0:
+        #     result = self.start.elem
+        #     if self.start.next == None:
+        #         self.start = None
+        #         self.end = None
+        #         return result
+        #     else:
+        #         self.start = self.start.next
+        #         return result
+        # else:
+        #     pre = Node(0)
+        #     pre.next = self.start
+        #     cur_index = 0
+        #     cur = self.start
+        #     while cur_index < index:
+        #         pre = pre.next
+        #         cur = cur.next
+        #         cur_index += 1
+        #     result = cur.elem
+        #     pre.next = cur.next
+        #     return result
+            
